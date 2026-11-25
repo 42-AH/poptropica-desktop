@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle><id>miniquest</id><name>Miniquest Adventures</name><cardSets><cardSet id="shared"><card>3244</card><card>3081</card><card>3109</card><card>3100</card><card>3223</card><card>3231</card><card>3232</card><card>3336</card><card>7000</card></cardSet></cardSets><assets><asset id="bundleBase"><assetPath>bundles/bundle_base.swf</assetPath></asset><asset id="bundleIcon"><assetPath>bundles/explorers.swf</assetPath></asset></assets></bundle>

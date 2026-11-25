@@ -1,0 +1,5 @@
+<item id="medal_deadAir">
+  <type>island</type><subType>deadAir</subType>
+  <textfields><text><value>Island Medallion</value></text><text><value>Congratulations!&#10;You completed&#10;Dead Air Island.</value><size>18</size><y>60</y></text></textfields>
+  <assets><asset id="cardBack"><assetPath>items/deadAir/background.swf</assetPath></asset><asset id="cardContent"><assetPath>items/deadAir/medal_deadAir.swf</assetPath></asset></assets>
+</item>

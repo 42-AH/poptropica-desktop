@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import {run} from '../deploy/access.mjs';
+const local=path=>new URL(path,import.meta.url);
+const receipt=JSON.parse(fs.readFileSync(local('./private/backup-verification.json')));
+if(receipt.manifestFilesVerified!==1524 || receipt.databases.length!==3 || !receipt.databases.every(x=>x.integrity==='ok') || receipt.manifestSha256!=='85eba7c91539f95662d66da5790cfdc7254654fa640d4991cc39763a7ad10b53')throw Error('Verified backup required');
+const folder='./publish/desktop/player/v1/';
+const data=Object.fromEntries(fs.readdirSync(local(folder)).map(name=>[name,fs.readFileSync(local(folder+name)).toString('base64')]));
+const program=fs.readFileSync(local('./deploy.py')).toString('base64');
+const result=JSON.parse(await run('target',`python3 -c "import base64;exec(base64.b64decode('${program}'))"`,JSON.stringify(data)));
+fs.writeFileSync(local('./private/live.json'),JSON.stringify(result,null,2));
+console.log(result);

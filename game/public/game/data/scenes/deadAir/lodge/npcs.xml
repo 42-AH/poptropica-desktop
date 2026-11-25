@@ -1,0 +1,26 @@
+<npcs>
+	<npc id="dot">
+		<skin>
+			<gender>female</gender>
+			<skinColor>0xf1c7a5</skinColor>
+			<hairColor>0xb8b5ad</hairColor>
+			<mouth>15</mouth>
+			<marks>grandma</marks>
+			<facial>nw_glasses02</facial>
+			<hair>grandma</hair>
+			<shirt>stor_winter_sweaterbw</shirt>
+			<pants>stor_winter_jill</pants>
+			<overshirt>mem_burgundy_winter_scarf</overshirt>
+			<eyeState>casual</eyeState>
+		</skin>
+		<position>
+			<x>1145</x>
+			<y>700</y>
+		</position>
+		<range>
+			<x>0</x>
+			<y>0</y>
+		</range>
+		<direction>right</direction>
+	</npc>
+</npcs>

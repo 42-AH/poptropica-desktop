@@ -1,0 +1,11 @@
+{
+  "id": "/play/",
+  "name": "Poptropica",
+  "short_name": "Poptropica",
+  "start_url": "/play/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#071f34",
+  "theme_color": "#071f34",
+  "icons": [{"src": "/favicon.png", "sizes": "32x32", "type": "image/png"}]
+}

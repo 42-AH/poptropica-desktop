@@ -1,0 +1,50 @@
+<npcs>
+	<npc id="rook">
+		<skin>
+			<gender>male</gender>
+			<skinColor>0xcf936a</skinColor>
+			<hairColor>0x4f3527</hairColor>
+			<mouth>14</mouth>
+			<marks>srstubb</marks><facial>headset2</facial>
+			<hair>poptropicon_worker1</hair>
+			<shirt>poptropicon_worker</shirt>
+			<pants>wwworker</pants>
+			<overshirt>poptropicon_worker1</overshirt>
+			<overpants>conworker1</overpants>
+			<eyeState>casual</eyeState>
+		</skin>
+		<position>
+			<x>1090</x>
+			<y>700</y>
+		</position>
+		<range>
+			<x>0</x>
+			<y>0</y>
+		</range>
+		<direction>left</direction>
+	</npc>
+
+	<npc id="bell">
+		<skin>
+			<gender>female</gender>
+			<skinColor>0x754a2f</skinColor>
+			<hairColor>0x33251f</hairColor>
+			<mouth>10</mouth>
+			<marks>freckles</marks>
+			<hair>ce_ranger</hair>
+			<shirt>stor_winter_jack</shirt>
+			<pants>wwgenericguy</pants>
+			<overshirt>ce_ranger</overshirt>
+			<eyeState>squint</eyeState>
+		</skin>
+		<position>
+			<x>250</x>
+			<y>700</y>
+		</position>
+		<range>
+			<x>0</x>
+			<y>0</y>
+		</range>
+		<direction>right</direction>
+	</npc>
+</npcs>

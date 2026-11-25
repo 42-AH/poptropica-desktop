@@ -1,0 +1,6 @@
+<item id="salvage_tag">
+  <type>island</type><subType>deadAir</subType>
+  <textfields><text id="title"><value>Salvage Tag</value></text></textfields>
+  <buttons><btn><label>USE</label><actions><action type="triggerEvent"><parameters><param id="event">salvage_tag</param></parameters></action></actions></btn></buttons>
+  <assets><asset id="cardBack"><assetPath>items/deadAir/background.swf</assetPath></asset><asset id="cardContent"><assetPath>items/deadAir/salvage_tag.swf</assetPath></asset></assets>
+</item>

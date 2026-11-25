@@ -1,0 +1,16 @@
+<sounds>
+  <sound type="music">
+    <asset loop="true" fade="true">Survival_3_Main_Theme.mp3</asset>
+  </sound>
+  <sound type="ambient">
+    <asset loop="true" fade="true" baseVolume=".22">winter_wind_01_loop.mp3</asset>
+  </sound>
+  <sound type="effects" action="step">
+    <asset id="snow">fs_snow_01.mp3,fs_snow_02.mp3,fs_snow_03.mp3,fs_snow_04.mp3</asset>
+    <asset id="deck">fs_wood_01.mp3,fs_wood_02.mp3,fs_wood_03.mp3,fs_wood_04.mp3</asset>
+  </sound>
+  <sound type="effects" action="impact">
+    <asset id="snow">ls_snow_01.mp3,ls_snow_02.mp3</asset>
+    <asset id="deck">ls_wood_01.mp3,ls_wood_02.mp3</asset>
+  </sound>
+</sounds>

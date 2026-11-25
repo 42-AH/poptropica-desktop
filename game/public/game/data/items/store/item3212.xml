@@ -1,0 +1,57 @@
+<item id="3212">
+	<type>store</type>
+	<subType>general</subType>
+	
+	<contentClass>
+		<className>game.ui.card.CharacterContentView</className>
+	</contentClass>
+	
+	<buttons>
+		<btn>
+			<label>COSTUMIZE</label>
+			<actions>
+				<action type="costumize"/>
+			</actions>
+		</btn>
+	</buttons>
+	
+	<textfields>
+	<text id="storeSubTitle">
+			<value>Shrink Ray Island</value>
+		
+            <x>-116</x>
+            <y>-172</y>
+            <width>232</width>
+            <height>22</height>
+            <styleFamily>webShop</styleFamily><styleId>caption</styleId>
+        </text>
+		<text id="storeTitle">
+			<value>Super Hard Helmet</value>
+		
+            <x>-116</x>
+            <y>-148</y>
+            <width>232</width>
+            <height>56</height>
+            <styleFamily>webShop</styleFamily><styleId>heading</styleId>
+        </text>
+		<text id="storeInstructions">
+			<value>Smash through objects like a raging bull in the Shrink Shot mini game!</value>
+		
+            <x>-116</x>
+            <y>78</y>
+            <width>232</width>
+            <height>64</height>
+            <styleFamily>webShop</styleFamily><styleId>description</styleId>
+        </text>
+	</textfields>
+	
+	<assets>
+		<asset id="cardBack" />
+	</assets>
+	
+	<looks>
+		<look>
+			<facial>shrinkraypromo2</facial>
+		</look>
+	</looks>
+</item>

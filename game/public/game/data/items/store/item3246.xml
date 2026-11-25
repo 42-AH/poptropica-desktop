@@ -1,0 +1,62 @@
+<item id="3246">
+	<type>store</type>
+	<assets>
+		<asset id="cardBack"/>
+		<asset id="cardContent">
+			<assetPath>items/store/item3246.swf</assetPath>
+		</asset>
+	</assets>
+	<buttons>
+		<btn>
+			<conditional id="hasLook" isTrue="false"></conditional>
+    		<label>EQUIP</label>
+    		<actions>
+	    		<action type="applyLook"/>
+			</actions>
+  		</btn>
+  		<btn>
+			<conditional id="hasLook" isTrue="true"></conditional>
+    		<label>REMOVE</label>
+    		<actions>
+	    		<action type="removeLook"/>
+			</actions>
+  		</btn>
+	</buttons>
+	<textfields>
+		<text id="storeSubTitle">
+			<value>Legendary Swords</value>
+		
+            <x>-116</x>
+            <y>-172</y>
+            <width>232</width>
+            <height>22</height>
+            <styleFamily>webShop</styleFamily><styleId>caption</styleId>
+        </text>
+		<text id="storeTitle">
+			<value>The Bolt</value>
+		
+            <x>-116</x>
+            <y>-148</y>
+            <width>232</width>
+            <height>56</height>
+            <styleFamily>webShop</styleFamily><styleId>heading</styleId>
+        </text>
+		<text id="storeInstructions">
+			<value>Feel the Power</value>
+		
+            <x>-116</x>
+            <y>78</y>
+            <width>232</width>
+            <height>64</height>
+            <styleFamily>webShop</styleFamily><styleId>description</styleId>
+        </text>
+	</textfields>
+	<looks>
+		<look>
+			<item>pswish02</item>
+		</look>
+	</looks>
+	<conditionals>
+		<conditional type="hasLook"/>
+	</conditionals>
+</item>

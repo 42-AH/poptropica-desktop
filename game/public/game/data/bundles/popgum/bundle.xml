@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle><id>popgum</id><name>Popgum</name><cardSets><cardSet id="shared"><card>3114</card><card>3115</card><card>3118</card><card>3157</card><card>3262</card></cardSet></cardSets><assets><asset id="bundleBase"><assetPath>bundles/bundle_base.swf</assetPath></asset><asset id="bundleIcon"><assetPath>bundles/hoa.swf</assetPath></asset></assets></bundle>

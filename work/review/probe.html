@@ -1,0 +1,19 @@
+<!doctype html><meta charset="utf-8"><script>
+(async()=>{
+ const file='/scenes/islandBacklot/assets/finalMovie1.flv', size=65536, sums=[], timings=[];
+ for(let run=0;run<4;run++){
+   const begin=performance.now();
+   for(let i=0;i<24;i++){
+     const start=size*i;
+     const response=await fetch(file,{headers:{Range:'bytes='+start+'-'+(start+size-1)},cache:'no-store'});
+     if(response.status!==206||response.headers.get('X-Poptropica-Asset')!=='installed')throw Error(response.status+' without installed range');
+     const bytes=await response.arrayBuffer();
+     if(bytes.byteLength!==size)throw Error('bad part length');
+     const check=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(n=>n.toString(16).padStart(2,'0')).join('');
+     if(run===0)sums.push(check);else if(check!==sums[i])throw Error('range data changed');
+   }
+   timings.push(Math.round(performance.now()-begin));
+ }
+ chrome.webview.postMessage('PASS '+JSON.stringify({timings,first:sums[0],last:sums.at(-1)}));
+})().catch(e=>chrome.webview.postMessage(String(e)));
+</script>

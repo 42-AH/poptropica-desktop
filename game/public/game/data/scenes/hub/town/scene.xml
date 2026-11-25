@@ -1,0 +1,49 @@
+<scene>
+	<sceneType>mainstreet</sceneType>
+	<cameraLimits>
+		<left>5</left>
+		<top>0</top>
+		<right>5090</right>
+		<bottom>1125</bottom>	
+	</cameraLimits>
+	<bounds>
+		<left>10</left>
+		<top>-100</top>
+		<right>5070</right>
+		<bottom>1000</bottom>
+	</bounds>
+	<data>dialog.xml,doors.xml,npcs.xml,sounds.xml,hits.xml,custom.xml,photo_booth.xml,mini_game.xml</data>
+	<assets>web-collision.png</assets>
+	<layers>
+		<layer>
+			<asset>backdrop.swf</asset>
+			<rate>0.75</rate>
+		</layer>
+		<layer id="background" bitmap="false">
+			<asset>web-background.png</asset>
+			<offsetX>-304.55</offsetX>
+			<offsetY>122.3</offsetY>
+			<rate>1</rate>
+		</layer>
+		<layer trimBitmap="true">
+			<condition type="platform">desktop</condition>
+			<asset>spinner.swf</asset>
+			<rate>1</rate>
+		</layer>
+		<layer hit="true">
+			<asset>interactive.swf</asset>
+			<rate>1</rate>
+		</layer>
+		<layer trimBitmap="true">
+			<asset>foreground.swf</asset>
+			<rate>1</rate>
+		</layer>
+	</layers>
+	<player>
+		<defaultPosition>
+			<x>1650</x>
+			<y>780</y>
+		</defaultPosition>
+		<defaultDirection>left</defaultDirection>
+	</player>
+</scene>

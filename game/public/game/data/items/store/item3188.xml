@@ -1,0 +1,63 @@
+<item id="3188">
+		<type>store</type>
+		<subType>general</subType>
+		
+					<contentClass> <!-- This displays avatar  -->
+		<className>game.ui.card.CharacterContentView</className>
+	</contentClass>
+
+
+	
+	<buttons>
+			<btn>
+					<label>COSTUMIZE</label>
+					<actions>
+						<action type="costumize"/>
+					</actions>
+			</btn>
+		</buttons>
+
+	<textfields>
+			<text id="storeTitle">
+			<value>Yokozuna</value>
+			
+            <x>-116</x>
+            <y>-148</y>
+            <width>232</width>
+            <height>56</height>
+            <styleFamily>webShop</styleFamily><styleId>heading</styleId>
+        </text>
+		<text id="storeSubTitle">
+			<value>Red Dragon Island</value>
+			
+            <x>-116</x>
+            <y>-172</y>
+            <width>232</width>
+            <height>22</height>
+            <styleFamily>webShop</styleFamily><styleId>caption</styleId>
+        </text>
+		<text id="storeInstructions">
+		
+            <x>-116</x>
+            <y>78</y>
+            <width>232</width>
+            <height>64</height>
+            <value>Use Space or the action button for this outfit’s special action.</value>
+            <styleFamily>webShop</styleFamily><styleId>description</styleId>
+        </text>
+ 	</textfields>
+		
+		<assets>
+		<asset id="cardBack" />
+		</assets>
+		
+		<looks>
+			<look>
+			<marks>pmthsumo4</marks>
+					<hair>mthtownie03</hair>
+					<shirt>pmthsumo4</shirt>
+			<pants>pmthsumo4</pants>
+					<overpants>pmthsumo4</overpants>
+			</look>
+		</looks>
+</item>

@@ -1,0 +1,6 @@
+<item id="reel">
+  <type>island</type><subType>deadAir</subType>
+  <textfields><text id="title"><value>Broadcast Reel</value></text></textfields>
+  <buttons><btn><label>USE</label><actions><action type="triggerEvent"><parameters><param id="event">reel</param></parameters></action></actions></btn></buttons>
+  <assets><asset id="cardBack"><assetPath>items/deadAir/background.swf</assetPath></asset><asset id="cardContent"><assetPath>items/deadAir/reel.swf</assetPath></asset></assets>
+</item>

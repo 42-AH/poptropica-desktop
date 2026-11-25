@@ -1,0 +1,12 @@
+<progress>
+  <island>deadAir</island>
+  <events>
+    <event>started</event>
+    <event>antenna_aligned</event>
+    <event>receiver_received</event>
+    <event>copper_found</event>
+    <event>tower_mid</event>
+    <event>rook_exposed</event>
+    <event>island_complete</event>
+  </events>
+</progress>

@@ -1,0 +1,57 @@
+<item id="3214">
+	<type>store</type>
+	<subType>general</subType>
+	
+	<contentClass>
+		<className>game.ui.card.CharacterContentView</className>
+	</contentClass>
+	
+	<buttons>
+		<btn>
+			<label>COSTUMIZE</label>
+			<actions>
+				<action type="costumize"/>
+			</actions>
+		</btn>
+	</buttons>
+	
+	<textfields>
+		<text id="storeSubTitle">
+			<value>Shrink Ray Island</value>
+		
+            <x>-116</x>
+            <y>-172</y>
+            <width>232</width>
+            <height>22</height>
+            <styleFamily>webShop</styleFamily><styleId>caption</styleId>
+        </text>
+			<text id="storeTitle">
+			<value>Bounce Ball</value>
+		
+            <x>-116</x>
+            <y>-148</y>
+            <width>232</width>
+            <height>56</height>
+            <styleFamily>webShop</styleFamily><styleId>heading</styleId>
+        </text>
+		<text id="storeInstructions">
+			<value>Bounce more in the Shrink Shot mini game!</value>
+		
+            <x>-116</x>
+            <y>78</y>
+            <width>232</width>
+            <height>64</height>
+            <styleFamily>webShop</styleFamily><styleId>description</styleId>
+        </text>
+	</textfields>
+	
+	<assets>
+		<asset id="cardBack" />
+	</assets>
+	
+	<looks>
+		<look>
+			<overshirt>shrinkraypromo4</overshirt>
+		</look>
+	</looks>
+</item>

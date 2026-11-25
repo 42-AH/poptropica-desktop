@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071f34">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Poptropica">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/play/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <title>Poptropica</title>
+  <meta name="description" content="Play classic Poptropica islands in your browser. Revisit your favorite adventures, save your progress, and play with friends on Poptropica.love.">
+  <link rel="stylesheet" href="/cloud/play.css">
+  <link rel="modulepreload" href="/cloud/save-store.mjs">
+  <link rel="modulepreload" href="/cloud/local-history.mjs">
+  <link rel="modulepreload" href="/cloud/friends.mjs">
+  <link rel="modulepreload" href="/cloud/player-identity.mjs">
+  <link rel="modulepreload" href="/cloud/common-room-travel.mjs">
+  <link rel="modulepreload" href="/cloud/friend-notifications.mjs">
+  <link rel="modulepreload" href="/cloud/legacy-games.mjs">
+  <link rel="modulepreload" href="/cloud/photos.mjs">
+  <link rel="modulepreload" href="/cloud/activity.mjs">
+  <link rel="modulepreload" href="/cloud/classic-audio.mjs">
+  <link rel="modulepreload" href="/cloud/classic-audio-catalog.mjs">
+  <link rel="modulepreload" href="/cloud/classic-audio-bridge.mjs">
+  <link rel="modulepreload" href="/cloud/legacy-sol.mjs">
+  <script type="module" src="/cloud/play.mjs"></script>
+  <script defer src="/cloud/analytics.js"></script>
+</head>
+<body class="game-site">
+
+  <main>
+
+
+    <section id="notice" aria-live="polite" hidden><p id="notice-text"></p><div id="notice-actions"></div></section>
+    <section id="game-view" aria-label="Game player" data-nosnippet>
+
+      <div id="original-game-frame">
+        <div class="original-frame-top" aria-hidden="true"></div>
+        <div class="original-frame-middle" aria-hidden="true"></div>
+        <div class="original-frame-bottom" aria-hidden="true"></div>
+        <div id="player"><p class="loading">Getting your island ready…</p></div>
+      </div>
+    </section>
+
+
+  </main>
+  <!-- Menus are not page content; keep them out of search snippets. -->
+  <div data-nosnippet>
+  <dialog id="classic-settings-dialog" aria-labelledby="classic-settings-dialog-title"><button class="close" data-close aria-label="Close settings">×</button><h2 id="classic-settings-dialog-title">Settings</h2><div class="menu-grid"><button data-panel="account">Account Settings</button><button data-panel="saves">Saves</button><button data-panel="photos">Photos</button><button data-panel="graphics">Graphics</button><button data-panel="help">Help &amp; Support</button><button data-panel="friends">Friends</button></div><p class="support-email">poptropica.love.support@gmail.com</p></dialog>
+  <dialog id="saves-dialog" aria-labelledby="saves-dialog-title"><button class="close" data-close aria-label="Close saves">×</button><h2 id="saves-dialog-title">Saved adventures</h2>
+    <p id="status" role="status" aria-live="polite">Preparing your saved game…</p>
+    <div class="menu-grid"><button id="sync">Save now</button><button id="export">Download backup</button><label class="button" for="import-file" tabindex="0">Import backup</label><input id="import-file" type="file" accept="application/json,.json" hidden><button id="history" hidden>Earlier saves</button></div>
+    <p>Guest progress stays in this browser. Sign in through Account Settings for an online copy. Keep a downloaded backup somewhere safe.</p>
+  </dialog>
+  <dialog id="graphics-dialog" aria-labelledby="graphics-dialog-title"><button class="close" data-close aria-label="Close graphics">×</button><h2 id="graphics-dialog-title">Graphics</h2><div id="rendering-control"></div><p>Low RAM uses less memory by reducing smoothing and artwork detail. Changing it saves your progress and restarts the game.</p><button id="fullscreen">Browser fullscreen</button></dialog>
+  <dialog id="help-dialog" aria-labelledby="help-dialog-title"><button class="close" data-close aria-label="Close help">×</button><h2 id="help-dialog-title">Help &amp; support</h2>
+    <button id="troubleshooting-button">Troubleshooting</button><div id="classic-sounds"></div>
+    <p class="support-email">Bugs or feedback?<br><a href="mailto:poptropica.love.support@gmail.com">poptropica.love.support@gmail.com</a></p>
+  </dialog>
+  <dialog id="troubleshooting-dialog" aria-labelledby="troubleshooting-dialog-title"><button class="close" data-close aria-label="Close troubleshooting">×</button><h2 id="troubleshooting-dialog-title">Troubleshooting</h2>
+    <h3>Frozen or blank game</h3><p>Reload the page. Your latest saved progress stays in this browser or your account.</p>
+    <h3>Game running slowly</h3><p>Close extra tabs and apps. Try a lower Graphics Quality or Low RAM in Settings. Save before restarting.</p>
+    <h3>Signed out after closing your browser</h3><p>Allow cookies and site data for poptropica.love. Private windows and clearing site data can sign you out.</p>
+    <h3>Protect your adventures</h3><p>Use Settings → Saves → Download backup before clearing browser data. Earlier saves are kept on this browser.</p>
+    <p class="support-email"><a href="mailto:poptropica.love.support@gmail.com">poptropica.love.support@gmail.com</a></p>
+  </dialog>
+
+  <div hidden><span id="identity"></span><button id="account-button"></button><button id="signout"></button><button id="friends-button"></button><span id="friends-badge" hidden></span></div>
+  <p id="game-message" role="status" aria-live="polite" hidden></p>
+  <dialog id="account-dialog" aria-labelledby="account-title">
+    <form id="account-form"><button type="button" class="close" aria-label="Close" id="close-account">×</button>
+      <h1 id="account-title">Account Settings</h1><p>Create an account for this site. Your original game login won’t work here.</p>
+      <label>Username<input id="username" name="username" autocomplete="username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" aria-describedby="username-help"></label><p id="username-help">3–24 letters, numbers, or underscores.</p>
+      <label id="password-label">Password<input id="password" name="password" type="password" autocomplete="current-password" required minlength="12" maxlength="72" aria-describedby="password-help"></label><p id="password-help">Use 12–72 characters for your password.</p>
+      <label id="recovery-label" hidden>Recovery code<input id="recovery" autocomplete="off"></label>
+      <p id="account-error" role="alert"></p><button class="primary" id="submit-account" type="submit">Sign in</button>
+      <div class="formlinks"><button type="button" id="mode-login">Sign in</button><button type="button" id="mode-register">Create account</button><button type="button" id="mode-recover">Forgot password?</button></div>
+    </form>
+  </dialog>
+  <dialog id="recovery-dialog" aria-labelledby="recovery-dialog-title"><h2 id="recovery-dialog-title">Keep your recovery code</h2><p>This code lets you reset your password. Save it somewhere private; it is shown only once. There is no email recovery.</p><code id="recovery-code"></code><button id="download-recovery">Download recovery code</button><button id="saved-recovery" class="primary">I have saved it</button></dialog>
+  <dialog id="account-status-dialog" aria-labelledby="account-status-dialog-title"><h2 id="account-status-dialog-title">Your account</h2><p>Signed in as <strong id="account-name"></strong>.</p><p>Your latest progress is saved to this account. Use Download backup for a separate copy.</p><button id="account-signout">Sign out</button><button id="close-account-status">Close account</button></dialog>
+  <dialog id="history-dialog" aria-labelledby="history-dialog-title"><h2 id="history-dialog-title">Earlier saves on this browser</h2><p>Cloud keeps your latest save. Earlier versions stay on this browser and are removed if its data is cleared. Download backups you want to keep. Restoring backs up your current progress first.</p><div id="versions"></div><button id="close-history">Close</button></dialog>
+  </div>
+</body></html>

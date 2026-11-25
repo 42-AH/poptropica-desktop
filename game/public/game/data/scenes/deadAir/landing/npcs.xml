@@ -1,0 +1,25 @@
+<npcs>
+	<npc id="bell">
+		<skin>
+			<gender>female</gender>
+			<skinColor>0x754a2f</skinColor>
+			<hairColor>0x33251f</hairColor>
+			<mouth>10</mouth>
+			<marks>freckles</marks>
+			<hair>ce_ranger</hair>
+			<shirt>stor_winter_jack</shirt>
+			<pants>wwgenericguy</pants>
+			<overshirt>ce_ranger</overshirt>
+			<eyeState>squint</eyeState>
+		</skin>
+		<position>
+			<x>600</x>
+			<y>740</y>
+		</position>
+		<range>
+			<x>0</x>
+			<y>0</y>
+		</range>
+		<direction>right</direction>
+	</npc>
+</npcs>

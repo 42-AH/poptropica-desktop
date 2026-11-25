@@ -1,0 +1,8 @@
+.web-loading-screen{position:absolute;inset:0;z-index:1000;background:#000;opacity:0;pointer-events:none;visibility:hidden;contain:layout paint;cursor:default}
+.web-loading-screen.is-loading{opacity:1;visibility:visible;pointer-events:auto}
+.web-loading-screen img{position:absolute;user-select:none;pointer-events:none;will-change:transform,opacity;animation:loading-wave 2.62s linear infinite;animation-play-state:paused}
+.web-loading-screen.is-loading img{animation-play-state:running}
+.web-loading-screen .loading-dot{animation-name:loading-dot}
+@keyframes loading-wave{0%,100%{transform:translate3d(2.5px,0,0)}25%{transform:translate3d(0,5px,0)}50%{transform:translate3d(-2.5px,0,0)}75%{transform:translate3d(0,-5px,0)}}
+@keyframes loading-dot{0%,100%{opacity:1;transform:translate3d(0,0,0)}50%{opacity:.2;transform:translate3d(0,0,0)}}
+@media(prefers-reduced-motion:reduce){.web-loading-screen img{animation:none}}

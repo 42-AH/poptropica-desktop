@@ -1,0 +1,6 @@
+<item id="receiver">
+  <type>island</type><subType>deadAir</subType>
+  <textfields><text id="title"><value>Field Receiver</value></text></textfields>
+  <buttons><btn><label>USE</label><actions><action type="triggerEvent"><parameters><param id="event">receiver</param></parameters></action></actions></btn></buttons>
+  <assets><asset id="cardBack"><assetPath>items/deadAir/background.swf</assetPath></asset><asset id="cardContent"><assetPath>items/survival3/radio1.swf</assetPath></asset></assets>
+</item>

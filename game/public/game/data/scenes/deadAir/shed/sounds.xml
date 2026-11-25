@@ -1,0 +1,11 @@
+<sounds>
+  <sound type="music">
+    <asset loop="true" fade="true">Survival_3_Main_Theme.mp3</asset>
+  </sound>
+  <sound type="effects" action="step">
+    <asset id="floor">fs_wood_01.mp3,fs_wood_02.mp3,fs_wood_03.mp3,fs_wood_04.mp3</asset>
+  </sound>
+  <sound type="effects" action="impact">
+    <asset id="floor">ls_wood_01.mp3,ls_wood_02.mp3</asset>
+  </sound>
+</sounds>

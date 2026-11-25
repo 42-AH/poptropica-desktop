@@ -1,0 +1,64 @@
+<item id="3118">
+		<type>store</type>
+		<subType>general</subType>
+		<buttons>
+			<btn>
+			<conditional id="hasAbility" isTrue="false"/>
+				<label>CHEW</label>
+				<actions>
+				<action type="activatePower">
+					<parameters>
+							<param id="trigger">true</param>
+					</parameters>
+				</action>
+			</actions>
+			</btn>
+			<btn>
+				<conditional id="hasAbility" isTrue="true"/>
+				<label>STOP CHEWING</label>
+				<actions>
+				<action type="deactivatePower"/>
+			</actions>
+			</btn>
+		</buttons>
+		<textfields>
+			<text id="storeSubTitle">
+					<value>WINTER BLAST FLAVOR</value>
+	 	 	
+            <x>-116</x>
+            <y>-172</y>
+            <width>232</width>
+            <height>22</height>
+            <styleFamily>webShop</styleFamily><styleId>caption</styleId>
+        </text>
+			<text id="storeTitle">
+				<value>POPGUM</value>
+				
+            <x>-116</x>
+            <y>-148</y>
+            <width>232</width>
+            <height>56</height>
+            <styleFamily>webShop</styleFamily><styleId>heading</styleId>
+        </text>
+		<text id="storeInstructions">
+		
+            <x>-116</x>
+            <y>78</y>
+            <width>232</width>
+            <height>64</height>
+            <value>Use Space or the action button to blow bubbles.</value>
+            <styleFamily>webShop</styleFamily><styleId>description</styleId>
+        </text>
+		</textfields>
+		<assets>
+		<asset id="cardBack" /><asset id="cardContent"/>
+		</assets>
+		
+ 	<specials>
+			<specialAbility>gum_winter</specialAbility>
+	</specials>
+	
+	<conditionals>
+			<conditional type="hasAbility"/>
+		</conditionals>
+</item>

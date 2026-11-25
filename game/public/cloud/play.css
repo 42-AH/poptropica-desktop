@@ -1,0 +1,101 @@
+:root{font:15px system-ui,sans-serif;color:#e8f3ff;background:#092a45;color-scheme:dark}*{box-sizing:border-box}body{margin:0}header{padding:16px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:#071f34;border-bottom:1px solid #28536d}.brand{font-size:25px;font-weight:800;text-decoration:none;color:#fff}.brand span{display:block;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:2px;color:#9dc6df}.account,.savebar,.savebar>div,.formlinks{display:flex;align-items:center;gap:10px;flex-wrap:wrap}main{max-width:1240px;margin:auto;padding:12px 20px}.savebar{justify-content:space-between;padding-bottom:12px}.savebar p{margin:6px 0;font-size:14px;color:#bbdbeb}button,.button{display:inline-block;font:inherit;font-size:13px;border:1px solid #52758b;border-radius:7px;background:#123b55;color:#fff;padding:8px 12px;cursor:pointer;text-decoration:none}button:hover,.button:hover{background:#215673}button:focus-visible,.button:focus-visible,input:focus-visible{outline:3px solid #ffd65a;outline-offset:2px}button:disabled{opacity:.5;cursor:wait}.primary{background:#ffd55d;border-color:#ffd55d;color:#142e43;font-weight:700}.primary:hover{background:#ffe28b}#player{width:100%;height:min(74vh,800px);min-height:440px;display:grid;place-items:center;background:#139ffd;border:1px solid #3e789d;border-radius:8px;overflow:hidden}iframe{border:0;width:100%;height:100%}.loading{color:#062a48}.footnote{font-size:12px;color:#adcadc;line-height:1.6}#notice{padding:18px;background:#fff1c8;color:#193045;border-radius:8px;margin:0 0 12px}#notice p{margin-top:0}#notice-actions{display:flex;flex-wrap:wrap;gap:10px}dialog{background:#12334b;color:#eff8ff;border:1px solid #587b91;border-radius:14px;max-width:460px;width:calc(100vw - 36px);padding:28px;box-shadow:0 24px 70px #0008}dialog::backdrop{background:#0009}dialog h1,dialog h2{margin-top:0;font-size:25px}dialog p{font-size:14px;line-height:1.6;color:#c4dce9}label{display:block;margin:14px 0}input{display:block;width:100%;border:1px solid #668197;border-radius:6px;padding:10px;background:#071f34;color:#fff;font:inherit;margin-top:6px}.close{position:absolute;top:10px;right:10px;border:0;background:transparent;font-size:24px}.formlinks{margin-top:20px}.formlinks button{font-size:12px;padding:5px 8px}#account-error{color:#ffadad}#recovery-code{display:block;overflow-wrap:anywhere;background:#071f34;padding:15px;margin:16px 0;user-select:all}#recovery-dialog button{margin:5px 0}#versions{display:grid;gap:8px;margin-bottom:16px;max-height:45vh;overflow:auto}[hidden]{display:none!important}@media(max-width:680px){header{align-items:flex-start;padding:12px;flex-direction:column}main{padding:12px}#player{min-height:340px;height:65vh}.savebar>div{gap:6px}.savebar button,.button{font-size:12px;padding:7px}.brand span{display:inline;margin-left:8px}}
+#player{position:relative}#player iframe{position:absolute;left:0;top:0;max-width:none;max-height:none;transform:none}
+#player{height:auto;min-height:0;aspect-ratio:3/2;max-height:74vh}
+.support{display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0 10px;text-align:center}.donate{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;padding:6px 10px;color:#c4dce9;white-space:nowrap}.donate svg{flex-shrink:0}.feedback{margin:0}.feedback a{color:#c4dce9;text-underline-offset:2px;overflow-wrap:anywhere}.feedback a:hover{color:#fff}.feedback a:focus-visible{outline:3px solid #ffd65a;outline-offset:2px}
+.player-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:12px;padding:0 0 8px;flex-shrink:0}.player-tools button{min-height:44px;white-space:nowrap}.game-expanded,.game-expanded body{overflow:hidden}#game-view.expanded{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;width:100%;height:100vh;height:100dvh;background:#071f34;padding:max(6px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}#game-view.expanded #player{flex:1;width:100%;height:100%;min-height:0;max-height:none;aspect-ratio:auto!important;border:0;border-radius:0;background:#071f34}#game-view.expanded .player-tools{padding-bottom:6px}#game-view::backdrop{background:#071f34}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.friends-dialog{max-width:640px;max-height:90vh;overflow:auto}.friend-lists{display:grid;gap:8px}.friend-lists h3{margin:12px 0 6px}.friend-lists section>p{margin:0;color:#9cb7c8}.friend-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 0;border-bottom:1px solid #31536b}.friend-row>span{flex:1;min-width:130px;overflow-wrap:anywhere}.friend-row button{font-size:12px;padding:6px 8px}
+
+.photos-dialog{width:min(760px,90vw);max-height:85vh;overflow:auto}.photo-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.photo-list figure{margin:0;padding:10px;background:#e8f2f8;color:#102f43;border-radius:8px}.photo-list img{width:100%;height:auto;border-radius:5px}.photo-list figcaption{font-size:14px;margin-top:8px}
+.classic-audio-controls{display:inline-flex;align-items:center;gap:6px;margin-right:auto;font-size:12px}.classic-audio-controls input[type=range]{width:72px;margin:0;padding:0;accent-color:#ffd55d}.player-tools:has(.classic-audio-controls:not([hidden])){flex-wrap:wrap;gap:8px}
+.online-count{font-size:12px;color:#bfd9e9;white-space:nowrap}
+/* Keep controls usable on narrow screens and when browser text is enlarged. */
+.savebar .button{margin:0}
+.account{min-width:0}#identity{overflow-wrap:anywhere}
+.photo-list{grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
+@media(max-width:680px){
+  header{flex-direction:row;align-items:center;flex-wrap:wrap;gap:8px 12px}
+  .brand{flex:1 1 auto}.account{width:100%}
+  .player-tools{gap:8px}
+  .savebar button,.savebar .button,.account button{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  dialog input{font-size:16px}
+  .friends-dialog button{min-height:44px}
+}
+.friends-badge{display:inline-grid;place-items:center;margin-left:6px;width:18px;height:18px;border-radius:50%;background:#ffd55d;color:#142e43;font-size:13px;font-weight:800;line-height:1;vertical-align:middle}
+
+.player-dev-badge{display:inline-block;background:#86efac;color:#064e3b;border:1px solid #4ade80;border-radius:4px;padding:1px 5px;font-size:11px;font-weight:700;line-height:1.3;vertical-align:middle;white-space:nowrap;text-transform:none}
+
+/* The game is the page. These menus share its original embedded lettering. */
+@font-face{font-family:PopCreative;src:url('/cloud/fonts/CreativeBlock.ttf') format('truetype');font-display:swap}
+@font-face{font-family:PopGhost;src:url('/cloud/fonts/GhostKid.ttf') format('truetype');font-display:swap}
+.game-site{padding:0;background:#139ffd;overflow:hidden;color-scheme:light}
+.game-site main{padding:0;max-width:none;margin:0}
+.game-site #game-view{position:fixed;inset:0;background:#139ffd}
+.game-site #player{position:absolute;inset:0;width:100%;height:100%;max-height:none;min-height:0;aspect-ratio:auto!important;border:0;border-radius:0;background:#139ffd}
+.game-site dialog{font:16px Arial,sans-serif;max-height:calc(100dvh - 30px);overflow:auto;width:min(540px,calc(100vw - 30px));max-width:760px;padding:34px 28px 26px;background:linear-gradient(#69c5fb 0,#269df1 55px);border:2px solid #0874b8;border-radius:15px;box-shadow:inset 0 0 0 2px #9ee0ff,0 7px 0 #0967a677,0 18px 45px #00365366;color:#fff}
+.game-site dialog::backdrop{background:#05395b66}
+.game-site dialog h1,.game-site dialog h2{font:28px PopCreative,Arial,sans-serif;color:white;text-align:center;margin:0 22px 24px;text-shadow:0 2px #147ec1}
+.game-site dialog h3{font:18px PopCreative,Arial,sans-serif;margin:20px 0 8px}
+.game-site dialog p{font-size:15px;line-height:1.5;color:#fff}
+.game-site button,.game-site .button{font:16px PopCreative,Arial,sans-serif;text-align:center;background:linear-gradient(#67bafb,#2795ed 50%,#1d8bea 51%);border:2px solid #0875ba;border-radius:11px;box-shadow:inset 0 1px 2px #c4ebff99,0 2px 1px #0866aa55;color:#fff;min-height:42px;padding:10px 14px}
+.game-site button:hover,.game-site .button:hover{filter:brightness(1.12)}
+.game-site button:disabled{filter:grayscale(.4);opacity:.6;cursor:default}
+.game-site .close{border:3px solid white;position:absolute;right:12px;top:12px;width:31px;height:31px;min-height:0;padding:0;line-height:23px;border-radius:50%;font:26px Arial;background:#079de9;box-shadow:0 1px 2px #00568b}
+.game-site input{background:white;color:#174773;border:2px solid #0874b8;font:16px Arial,sans-serif}
+.game-site a{color:white;text-underline-offset:3px}
+.game-site .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.game-site .menu-grid .button{margin:0;display:grid;place-items:center}
+.game-site #recovery-code{background:#0968ad;color:white}
+.game-site #notice{position:absolute;z-index:100;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 30px));max-height:90%;overflow:auto;padding:26px;border:3px solid #0875ba;box-shadow:0 10px 60px #00365388;background:#41aff8;color:#fff;border-radius:16px}
+.game-site #game-message{position:absolute;z-index:110;bottom:12px;left:50%;transform:translateX(-50%);max-width:min(600px,90%);margin:0;padding:10px 18px;border:2px solid #a9e4ff;border-radius:16px;background:#056faeea;color:#fff;font:14px Arial;pointer-events:none;text-align:center}
+.game-site .support-email{font-size:12px;overflow-wrap:anywhere;text-align:center}
+.game-site .friend-row{border-color:#a4dfff}.game-site .friend-lists section>p{color:#fff}
+.game-site .friends-dialog,.game-site .photos-dialog{width:min(720px,calc(100vw - 30px))}
+.game-site .photo-list figure{background:white;padding:10px 10px 22px;border-radius:2px;box-shadow:0 3px 6px #00538955}
+.game-site .photo-list img{display:block;aspect-ratio:3/2;object-fit:contain;border-radius:0;background:#d8effc}
+.game-site .classic-audio-controls{display:flex;flex-wrap:wrap;margin-top:18px}
+@media(max-width:480px){.game-site dialog{padding:42px 18px 22px}.game-site dialog h2{font-size:23px}.game-site button,.game-site .button{font-size:14px}.game-site .menu-grid{grid-template-columns:1fr}}
+.game-site #help-dialog{text-align:center}
+.game-site #account-status-dialog{text-align:center}
+.game-site .close{width:48px;height:51px;min-height:0;right:8px;top:7px;border:0;border-radius:50%;padding:0;background:transparent url('/cloud/close-button.svg') center/contain no-repeat;box-shadow:none;font-size:0;line-height:0;color:transparent}
+.game-site .close:hover{background:transparent url('/cloud/close-button.svg') center/contain no-repeat;filter:brightness(1.1)}
+
+/* Reserve the original close artwork's corner and keep small copy legible. */
+.game-site dialog{color:#083657}
+.game-site dialog p,.game-site .friend-lists section>p,.game-site dialog a{color:#083657}
+.game-site dialog #account-error,.game-site dialog [role=alert]{color:#6e1224}
+.game-site dialog h1,.game-site dialog h2{margin-left:32px;margin-right:42px;overflow-wrap:anywhere}
+.game-site dialog h3{color:#fff}
+.game-site dialog #recovery-code{color:#fff}
+@media(max-width:480px){.game-site dialog h1,.game-site dialog h2{font-size:23px;margin:18px 0 22px}}
+
+.game-site .primary,.game-site .primary:hover{background:linear-gradient(#67bafb,#2795ed 50%,#1d8bea 51%);border-color:#0875ba;color:#fff}
+.game-site .classic-audio-controls{justify-content:center}
+
+/* Match the original handwritten menu copy while keeping contrast on blue. */
+.game-site dialog{font-family:PopHand,PopCreative,Arial,sans-serif;font-size:18px;color:#fff}
+.game-site dialog p,.game-site dialog label,.game-site dialog a,.game-site .friend-lists section>p,.game-site .friend-row>span{font-family:PopHand,PopCreative,Arial,sans-serif;color:#fff;text-shadow:0 1px 1px #07528e,0 0 2px #07528e;line-height:1.45}
+.game-site dialog p{font-size:18px}
+.game-site dialog .support-email{font-size:14px}
+.game-site dialog input{font-family:Arial,sans-serif;text-shadow:none}
+.game-site dialog #account-error,.game-site dialog [role=alert]{color:#fff2bd;text-shadow:0 1px 2px #713400}
+.game-site .photo-list figcaption{font-family:PopHand,PopCreative,Arial,sans-serif;font-size:16px;color:#175281;text-shadow:none;text-align:center}
+.game-site #notice{font-family:PopHand,PopCreative,Arial,sans-serif;font-size:18px;text-shadow:0 1px 1px #07528e}
+.game-site #game-message{font-family:PopHand,PopCreative,Arial,sans-serif;font-size:16px}
+.game-site .classic-audio-controls{font:16px PopHand,PopCreative,Arial,sans-serif}
+
+@font-face{font-family:PopHand;src:url('/cloud/fonts/CreativeBlockRegular.ttf') format('truetype');font-display:swap}
+.game-site dialog label.button{font-family:PopCreative,Arial,sans-serif}
+
+/* Original archived 1003 x 759 wrapper; game opening is 960 x 640 at (22,94). */
+.game-site #game-view{display:grid;place-items:center;background:#139ffd}
+.game-site #original-game-frame{position:relative;width:min(100vw,calc(100dvh * 1003 / 759));aspect-ratio:1003/759;flex:none}
+.original-frame-top,.original-frame-middle,.original-frame-bottom{position:absolute;left:0;width:100%;pointer-events:none;background-size:100% 100%;background-repeat:no-repeat}
+.original-frame-top{top:0;height:12.3847167325%;background-image:url('/game/images/banner_plain.gif')}
+.original-frame-middle{top:12.3847167325%;height:84.3214756258%;background-image:url('/game/images/middle.gif');background-size:100% 1px;background-repeat:repeat-y}
+.original-frame-bottom{bottom:0;height:3.2938076416%;background-image:url('/game/images/footer.gif')}
+.game-site #original-game-frame #player{inset:auto;left:2.1934197408%;top:12.3847167325%;width:95.7128614158%;height:84.3214756258%;background:#0078ef}
+
+/* Classic framework supplies its own original frame for miniquests/islands. */
+.game-site #game-view.has-native-frame #original-game-frame{width:100%;height:100%;aspect-ratio:auto}
+.game-site .has-native-frame .original-frame-top,.game-site .has-native-frame .original-frame-middle,.game-site .has-native-frame .original-frame-bottom{display:none}
+.game-site #game-view.has-native-frame #player{left:0;top:0;width:100%;height:100%;background:#139ffd}
