@@ -72,18 +72,18 @@ $('classic-sounds').append(audioControls);
 const classicAudio=createClassicAudio({container:audioControls,resolve:selectClassicAudio});
 const classicAudioMessages=installClassicAudioMessages(classicAudio,{getFrame:()=>frame,isActive:()=>locked&&!conflicted&&!restoringHistory&&workspace?.owner===(user?'user:'+user.id:'guest')});
 let pendingFriends=0;
-const friendNotifications=installFriendNotifications({button:$('friends-button'),badge:$('friends-badge'),getAccountId:()=>user?.id??null,onChange:count=>{
+const friendNotifications=installFriendNotifications({button:$('friends-button'),badge:$('friends-badge'),getAccountId:()=>null,onChange:count=>{
   if(count>pendingFriends)message('You have a friend request or invitation. Open the Friends icon to see it.');
   pendingFriends=count;
 }});
-const activity=createActivityTracker({getAccountId:()=>user?.id??null,
+const activity=createActivityTracker({getAccountId:()=>null,
   isPlaying:()=>locked&&!!frame&&!conflicted&&!restoringHistory&&workspace?.owner==='user:'+user?.id,
   send:data=>api('activity',{data})});
 const legacyGamesPanel=createLegacyGamesPanel({send:move=>{
   if(gameControlsAvailable()&&frame)frame.contentWindow.postMessage({type:'poptropica:legacy-move',...move},location.origin);
 }});
 function openAccountPanel(){
-  if(gameControlsAvailable())message('Accounts are available in Play online.',true);
+  if(gameControlsAvailable())message(user ? 'Playing offline as '+user.username+'. Reconnect to sync your adventure.' : 'Sign in online once to play your account offline.',true);
 }
 const friendsPanel=createFriendsPanel({getUser:()=>user,openAccount:openAccountPanel,
 onUpdate:(account,data)=>friendNotifications.update(account,(data.incoming?.length??0)+(data.invites?.length??0)),
@@ -148,7 +148,7 @@ function showIdentity() {
   friendsPanel.close();
   photosPanel.reset();
   renderPlayerIdentity($('identity'),user,'Offline');
-  $('account-button').hidden=!!user; $('signout').hidden=!user;
+  $('account-button').hidden=!!user; $('signout').hidden=true;
   const active=locked && workspace && workspace.owner===(user?'user:'+user.id:'guest');
   $('history').hidden=false; $('sync').disabled=!active;
   $('history').disabled=!active; $('import-file').disabled=!active;
@@ -193,7 +193,7 @@ function migrateHistory(owner) {
   const accountId=user?.id;
   const operation=(async()=>{
     await migrateBrowserBackups(db,owner);
-    if(accountId&&owner==='user:'+accountId)await transferCloudHistory(db,accountId,api,()=>user?.id===accountId&&workspace?.owner===owner);
+
   })().finally(()=>historyMigrations.delete(owner));
   historyMigrations.set(owner,operation);return operation;
 }
@@ -217,7 +217,7 @@ function startPlayer() {
   frame.src='/game/index.html'+(new URLSearchParams(location.search).has('webDiagnostics')?'?webDiagnostics=1':'');
   $('player').replaceChildren(frame);
   fitPlayer();
-  activity.start();
+
   void migrateHistory(workspace.owner).catch(()=>{
     historyWarning='Some earlier saves couldn’t be moved to this browser. Existing cloud history was kept.';message('Your current game is ready.');
   });
@@ -313,38 +313,9 @@ async function waitForSync() {
   while(syncing) await new Promise(resolve=>setTimeout(resolve,30));
 }
 async function syncNow() {
-  if(!locked || syncing || conflicted || restoringHistory || !workspace) return;
-  if(!user || workspace.owner!=='user:'+user.id) {await checkpoint();message('Progress saved on this PC.');return;}
-  syncing=true;
-  try {
-    const current=pending?null:await captureBundle();
-    // Retry an uncertain request with the identical ID and body before newer data.
-    const bundle=pending?pending.bundle:current.bundle;
-    const digest=pending?pending.digest:current.digest;
-    // Browser history quota must not block the latest cloud save.
-    try {await checkpoint();}catch { /* Keep the visible local-backup warning. */ }
-    if(!pending && digest===workspace.syncedDigest){message('Progress saved online.');return;}
-    if(!pending) pending={accountId:user.id,baseRevision:workspace.revision,requestId:crypto.randomUUID(),bundle,digest};
-    message('Saving online…');
-    const result=await api('save',{data:{accountId:pending.accountId,baseRevision:pending.baseRevision,requestId:pending.requestId,bundle:pending.bundle}});
-    workspace.revision=result.revision;workspace.syncedDigest=result.digest;writeMeta();pending=null;
-    try {await checkpoint();}catch { /* Latest cloud save succeeded; keep the local warning. */ }
-    message('Progress saved online.');
-    if((await captureBundle()).digest!==workspace.syncedDigest) scheduleSync();
-  } catch(error) {
-    if(error.conflict) {pending=null;await showConflict(await api('save'));}
-    else if(error.status===401) {
-      authExpired=true;
-      message('Your session expired. Progress is saved on this browser; sign in again to sync.');
-      $('account-button').hidden=false;
-    } else if(error.status===403 || error.code==='account_changed') {
-      message(error.message+' Progress is still saved on this browser.');
-      if(error.code==='account_changed'){authExpired=true;$('account-button').hidden=false;}
-    } else {
-      message(error.message+' Progress is still saved on this browser.');
-      clearTimeout(syncTimer);syncTimer=setTimeout(()=>syncNow(),15000);
-    }
-  } finally {syncing=false;}
+  if(!locked || !workspace || restoringHistory)return;
+  await checkpoint();
+  message('Progress saved on this PC.');
 }
 function download(name,text,type='application/json') {
   const url=URL.createObjectURL(new Blob([text],{type}));
@@ -473,7 +444,7 @@ addEventListener('message',event=>{
     gameWidth=Math.max(320,Math.min(1600,Number(event.data.width)||960));
     gameHeight=Math.max(240,Math.min(1000,Number(event.data.height)||640));fitPlayer();
     $('player').style.aspectRatio=gameWidth+'/'+gameHeight;
-    frame.contentWindow.postMessage({type:'poptropica:start',online:{accountId:user?.id??null,username:user?.username??'',csrf,gamePolicy}},location.origin);
+    frame.contentWindow.postMessage({type:'poptropica:start',online:{accountId:null,username:'',csrf:'',gamePolicy}},location.origin);
   }
   if(event.origin===location.origin && event.source===frame?.contentWindow && event.data?.type==='poptropica:notice' &&
      locked && !busy && !conflicted && !restoringHistory && typeof event.data.text==='string' && event.data.text.length<=500) message(event.data.text);
@@ -507,6 +478,13 @@ async function initialize() {
   locked=true;db=await openBackups();
   workspace=readMeta()||{owner:'guest',revision:0,syncedDigest:'',username:''};
   writeMeta();await checkpoint();
+  const cached=JSON.parse(localStorage.getItem('poptropica.desktop.offline.v1')||'null');
+  if(cached && cached.owner===workspace.owner && /^user:[1-9][0-9]*$/.test(workspace.owner)){
+    user={id:Number(workspace.owner.slice(5)),username:workspace.username};
+    showIdentity();clearNotice();startPlayer();
+    message('Playing offline as '+user.username+'. Progress is saved on this PC.');
+    return;
+  }
   const session=await api('session');csrf=session.csrf;
   user=session.user;showIdentity();
   if(user) await selectAccount(user);

@@ -12,10 +12,11 @@ args = parser.parse_args()
 assembled = root / "work/assembled"
 if not assembled.exists():
     if not args.release:
-        parser.error("--release requires the Poptropica.exe asset from v1.1.3 on the first build")
+        parser.error("--release requires the Poptropica.exe asset from v1.1.4 on the first build")
     release = args.release.resolve(strict=True)
     with release.open("rb") as stream:
         if hashlib.file_digest(stream, "sha256").hexdigest() not in {
+            "5bee1044903f7ae68f129e9ff19ce2dc1149fb2649b44c75339eb0ce5b8ca4a9",
             "ce340402de72d78325c22e5114f036ead2358a36d49610d21e882492c21817ef",
             "ff2735dd5306a126bd79e333ca156388112540e8579bf3688410ebcac006c632",
         }:

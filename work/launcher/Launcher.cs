@@ -17,8 +17,8 @@ using Microsoft.Win32.SafeHandles;
 [assembly: AssemblyDescription("Poptropica desktop player")]
 [assembly: AssemblyCompany("poptropica.love")]
 [assembly: AssemblyProduct("Poptropica")]
-[assembly: AssemblyVersion("1.1.3.0")]
-[assembly: AssemblyFileVersion("1.1.3.0")]
+[assembly: AssemblyVersion("1.1.4.0")]
+[assembly: AssemblyFileVersion("1.1.4.0")]
 
 namespace PoptropicaDesktop
 {
@@ -207,6 +207,7 @@ namespace PoptropicaDesktop
         private readonly Label heading = new Label();
         private readonly Label detail = new Label();
         private readonly Button retry = new GameButton();
+        private DesktopWorkspace workspace;
         private bool local, busy, playing, fullScreen;
         private ulong navigation;
         private Form hostWindow;
@@ -431,7 +432,8 @@ namespace PoptropicaDesktop
                 Directory.CreateDirectory(data);
                 if (view.CoreWebView2 == null)
                 {
-                    var env = await CoreWebView2Environment.CreateAsync(null, Path.Combine(data, "Player"));
+                    var options = new CoreWebView2EnvironmentOptions { AdditionalBrowserArguments="--disable-features=BackForwardCache" };
+                    var env = await CoreWebView2Environment.CreateAsync(null, Path.Combine(data, "Player"), options);
                     if (IsDisposed) return;
                     await view.EnsureCoreWebView2Async(env);
                     await view.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(@"
@@ -442,6 +444,7 @@ namespace PoptropicaDesktop
                                 if (intro) intro.textContent = 'CREATE AN ACCOUNT FOR THIS APP. ONLY YOUR POPTROPICA.LOVE LOGIN WILL WORK HERE';
                             }, {once:true});
                         }");
+                    workspace=new DesktopWorkspace(view.CoreWebView2);
                     BundledAssets.Attach(view.CoreWebView2);
                     view.CoreWebView2.ContainsFullScreenElementChanged += delegate {
                         if (fullScreen != view.CoreWebView2.ContainsFullScreenElement) ToggleFull();
@@ -465,7 +468,9 @@ namespace PoptropicaDesktop
                         }
                     };
                 }
+                string account=await workspace.Prepare(local,lifetime.Token);
                 if (local) await server.Start(lifetime.Token);
+                if(local && account!=null)Text="Poptropica · Offline · "+account;
                 if (IsDisposed) return;
                 File.WriteAllText(Path.Combine(data, "play-mode"), local ? "offline" : "online");
                 view.CoreWebView2.Navigate((local ? OfflineServer.Origin : OnlineOrigin) + "/play/");
@@ -490,6 +495,7 @@ namespace PoptropicaDesktop
 
         private void Starting(object sender, CoreWebView2NavigationStartingEventArgs e)
         {
+            if(workspace!=null && workspace.Navigating){e.Cancel=!workspace.Expects(e.Uri);return;}
             if (GameAddress(e.Uri)) navigation = e.NavigationId;
             else e.Cancel = true;
         }
@@ -506,7 +512,7 @@ namespace PoptropicaDesktop
 
         private void Finished(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
-            if (IsDisposed || e.NavigationId != navigation) return;
+            if (IsDisposed || (workspace!=null && workspace.Navigating) || e.NavigationId != navigation) return;
             if (e.WebErrorStatus == CoreWebView2WebErrorStatus.OperationCanceled && playing) return;
             if (!e.IsSuccess || e.HttpStatusCode >= 400)
             {
