@@ -1,3 +1,8 @@
+# POPTROPICA.LOVE APP FOR WINDOWS
+(see poptropica.love)
+
+### App has both online (realms, friends, common rooms hosted by poptropica.love) and offline functionality
+
 # INSTALLATION
 
 ## Either: Download the .exe from [releases](https://github.com/42-AH/poptropica-desktop/releases/latest)
