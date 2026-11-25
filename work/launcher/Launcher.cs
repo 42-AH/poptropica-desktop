@@ -17,8 +17,8 @@ using Microsoft.Win32.SafeHandles;
 [assembly: AssemblyDescription("Poptropica desktop player")]
 [assembly: AssemblyCompany("poptropica.love")]
 [assembly: AssemblyProduct("Poptropica")]
-[assembly: AssemblyVersion("1.1.1.0")]
-[assembly: AssemblyFileVersion("1.1.1.0")]
+[assembly: AssemblyVersion("1.1.3.0")]
+[assembly: AssemblyFileVersion("1.1.3.0")]
 
 namespace PoptropicaDesktop
 {
@@ -363,7 +363,7 @@ namespace PoptropicaDesktop
 
         private async Task OpenSettings()
         {
-            using(var dialog = new GameDialog("Settings","Player " + PlayerUpdates.Running.ToString(3) + " · Download player and island updates when Poptropica opens. Updates take effect next launch."))
+            using(var dialog = new GameDialog("Settings","Player " + PlayerUpdates.Running.ToString(3) + " · Updates download when you open Poptropica and take effect the next time you play."))
             {
                 bool initiallyEnabled = automaticEnabled;
                 dialog.AddToggle("Automatic updates",automaticEnabled,enabled=>{
@@ -434,6 +434,14 @@ namespace PoptropicaDesktop
                     var env = await CoreWebView2Environment.CreateAsync(null, Path.Combine(data, "Player"));
                     if (IsDisposed) return;
                     await view.EnsureCoreWebView2Async(env);
+                    await view.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(@"
+                        if (window === window.top && location.pathname === '/play/' &&
+                            (location.origin === '" + OnlineOrigin + @"' || location.origin === '" + OfflineServer.Origin + @"')) {
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const intro = document.querySelector('#account-form > #account-title + p');
+                                if (intro) intro.textContent = 'CREATE AN ACCOUNT FOR THIS APP. ONLY YOUR POPTROPICA.LOVE LOGIN WILL WORK HERE';
+                            }, {once:true});
+                        }");
                     BundledAssets.Attach(view.CoreWebView2);
                     view.CoreWebView2.ContainsFullScreenElementChanged += delegate {
                         if (fullScreen != view.CoreWebView2.ContainsFullScreenElement) ToggleFull();

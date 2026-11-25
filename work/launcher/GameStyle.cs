@@ -138,47 +138,13 @@ namespace PoptropicaDesktop
         }
     }
 
-    internal sealed class GameToggle : CheckBox
-    {
-        internal GameToggle()
-        {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
-            Cursor=Cursors.Hand;
-            Padding=new Padding(6,1,6,1);
-        }
-
-        public override Size GetPreferredSize(Size proposed)
-        {
-            var text=TextRenderer.MeasureText(Text,Font);
-            return new Size(text.Width+text.Height+Padding.Horizontal+10,text.Height+Padding.Vertical+8);
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            int size=Math.Max(12,Font.Height);
-            var box=new Rectangle(Padding.Left+2,(Height-size)/2,size,size);
-            e.Graphics.SmoothingMode=SmoothingMode.AntiAlias;
-            using(var path=GameStyle.Rounded(box,4))
-            using(var fill=new SolidBrush(Checked ? GameStyle.Deep : Color.White))
-            using(var edge=new Pen(GameStyle.Deep,2))
-            {
-                e.Graphics.FillPath(fill,path);
-                e.Graphics.DrawPath(edge,path);
-            }
-            if(Checked)
-                using(var tick=new Pen(Color.White,2))
-                    e.Graphics.DrawLines(tick,new[]{new Point(box.Left+size/5,box.Top+size/2),new Point(box.Left+size*2/5,box.Top+size*3/4),new Point(box.Left+size*4/5,box.Top+size/4)});
-            var label=Rectangle.FromLTRB(box.Right+6,0,Width-Padding.Right,Height);
-            TextRenderer.DrawText(e.Graphics,Text,Font,label,ForeColor,TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
-            if(Focused && ShowFocusCues)ControlPaint.DrawFocusRectangle(e.Graphics,Rectangle.Inflate(ClientRectangle,-1,-1));
-        }
-    }
-
     internal sealed class GameDialog : UserControl
     {
         private readonly FlowLayoutPanel buttons = new FlowLayoutPanel();
         private readonly Label body = new Label();
         private readonly TaskCompletionSource<DialogResult> result = new TaskCompletionSource<DialogResult>();
+        private readonly Label heading;
+        private CheckBox option;
         private Button cancelAction;
         internal Button DefaultAction { get; set; }
 
@@ -190,15 +156,15 @@ namespace PoptropicaDesktop
             Padding = new Padding(8);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.FromArgb(38,157,241);
-            var heading = new Label { Text=title, ForeColor=Color.White, Font=GameStyle.Type(19,true), AutoSize=false, BackColor=Color.Transparent, TextAlign=ContentAlignment.MiddleCenter, Dock=DockStyle.Top, Height=62 };
+            heading = new Label { Text=title, ForeColor=Color.White, Font=GameStyle.Type(19,true), AutoSize=false, BackColor=Color.Transparent, TextAlign=ContentAlignment.MiddleCenter, Dock=DockStyle.None };
             body.Text = description;
             body.ForeColor = GameStyle.Ink;
             body.Font = GameStyle.Type(13);
             body.BackColor = Color.Transparent;
-            body.Dock = DockStyle.Fill;
+            body.Dock = DockStyle.None;
             body.Padding = new Padding(22,2,22,2);
             body.TextAlign = ContentAlignment.MiddleCenter;
-            buttons.Dock = DockStyle.Bottom;
+            buttons.Dock = DockStyle.None;
             buttons.Height = 60;
             buttons.Padding = new Padding(8,2,12,6);
             buttons.FlowDirection = FlowDirection.RightToLeft;
@@ -206,22 +172,52 @@ namespace PoptropicaDesktop
             Controls.Add(body); Controls.Add(buttons); Controls.Add(heading);
         }
 
-        internal string Body { set { body.Text = value; } }
+        internal string Body { set { body.Text = value; Arrange(); } }
+
+        private void Arrange()
+        {
+            var backdrop = Parent as Panel;
+            if (backdrop == null || backdrop.ClientSize.Width < 1) return;
+            float scale;
+            using (var g=CreateGraphics()) scale=g.DpiX/96f;
+            int gap=Math.Max(8,(int)(12*scale));
+            int width=Math.Min((int)(540*scale),Math.Max(1,backdrop.ClientSize.Width-gap*2));
+            int inner=Math.Max(1,width-gap*2);
+            int y=gap;
+            foreach(var label in new[]{heading,body})
+            {
+                int available=Math.Max(1,inner-label.Padding.Horizontal);
+                var size=TextRenderer.MeasureText(label.Text,label.Font,new Size(available,Int32.MaxValue),TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
+                label.SetBounds(gap,y,inner,size.Height+label.Padding.Vertical+gap);
+                y=label.Bottom+gap;
+            }
+            if(option!=null)
+            {
+                var size=option.GetPreferredSize(Size.Empty);
+                option.SetBounds((width-size.Width)/2,y,size.Width,size.Height);
+                y=option.Bottom+gap;
+            }
+            int buttonHeight=buttons.GetPreferredSize(new Size(inner,0)).Height;
+            buttons.SetBounds(gap,y,inner,buttonHeight);
+            Size=new Size(width,buttons.Bottom+gap);
+            Location=new Point(Math.Max(0,(backdrop.ClientSize.Width-width)/2),Math.Max(0,(backdrop.ClientSize.Height-Height)/2));
+        }
 
         internal async Task<DialogResult> Present(Form owner)
         {
             var game = (GameWindow)owner;
-            using (var backdrop = new Panel {Dock=DockStyle.Fill, BackColor=GameStyle.Deep,TabStop=false})
+            using (var backdrop = new Panel {Dock=DockStyle.Fill, BackColor=GameStyle.Deep,TabStop=false,AutoScroll=true})
             {
                 backdrop.Controls.Add(this);
                 backdrop.Resize += delegate {
-                    Location = new Point(Math.Max(0,(backdrop.ClientSize.Width-Width)/2),Math.Max(0,(backdrop.ClientSize.Height-Height)/2));
+                    Arrange();
                 };
                 EventHandler onClose = delegate { Dismiss(DialogResult.Cancel); };
                 game.Disposed += onClose;
                 try
                 {
                     game.ShowOverlay(backdrop);
+                    Arrange();
                     if(DefaultAction!=null)DefaultAction.Focus();
                     return await result.Task;
                 }
@@ -241,11 +237,8 @@ namespace PoptropicaDesktop
 
         internal void AddToggle(string label,bool initial,Func<bool,bool> changed)
         {
-            var option = new GameToggle { Text=label,Checked=initial,Font=GameStyle.Type(13,true),ForeColor=GameStyle.Ink,BackColor=Color.Transparent,AutoSize=true,Anchor=AnchorStyles.None };
-            var row=new TableLayoutPanel { Height=37,Dock=DockStyle.Bottom,ColumnCount=1,RowCount=1,BackColor=Color.Transparent };
-            row.Controls.Add(option,0,0);
-            Controls.Add(row);
-            Controls.SetChildIndex(row,1);
+            option = new CheckBox { Text=label, Checked=initial, Font=GameStyle.Type(13,true), ForeColor=GameStyle.Ink, BackColor=BackColor, FlatStyle=FlatStyle.Flat, Cursor=Cursors.Hand, AutoSize=true, UseVisualStyleBackColor=false };
+            Controls.Add(option);
             bool syncing=false;
             option.CheckedChanged+=delegate {
                 if(syncing)return;

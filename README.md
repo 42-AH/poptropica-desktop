@@ -18,7 +18,7 @@ git clone https://github.com/42-AH/poptropica-desktop.git
 cd poptropica-desktop
 ```
 
-### Download Poptropica.exe from [release v1.1.0](https://github.com/42-AH/poptropica-desktop/releases/tag/v1.1.0) into your Downloads folder.
+### Download Poptropica.exe from [release v1.1.3](https://github.com/42-AH/poptropica-desktop/releases/tag/v1.1.3) into your Downloads folder.
 
 ### Build the app:
 

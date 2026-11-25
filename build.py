@@ -12,11 +12,14 @@ args = parser.parse_args()
 assembled = root / "work/assembled"
 if not assembled.exists():
     if not args.release:
-        parser.error("--release requires the Poptropica.exe asset from v1.1.0 on the first build")
+        parser.error("--release requires the Poptropica.exe asset from v1.1.3 on the first build")
     release = args.release.resolve(strict=True)
     with release.open("rb") as stream:
-        if hashlib.file_digest(stream, "sha256").hexdigest() != "ff2735dd5306a126bd79e333ca156388112540e8579bf3688410ebcac006c632":
-            parser.error("The release asset checksum does not match v1.1.0")
+        if hashlib.file_digest(stream, "sha256").hexdigest() not in {
+            "ce340402de72d78325c22e5114f036ead2358a36d49610d21e882492c21817ef",
+            "ff2735dd5306a126bd79e333ca156388112540e8579bf3688410ebcac006c632",
+        }:
+            parser.error("The release asset checksum does not match a supported build asset")
     subprocess.run([release, "--extract-to", assembled], check=True)
     (assembled / "complete").unlink()
 offline = assembled / "offline"
