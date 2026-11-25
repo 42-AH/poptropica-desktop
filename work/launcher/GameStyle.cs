@@ -52,18 +52,16 @@ namespace PoptropicaDesktop
             return new Font(family, size, style, GraphicsUnit.Point);
         }
 
-        internal static void ButtonStyle(Button button, bool primary)
+        internal static GraphicsPath Rounded(Rectangle bounds, int radius)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderColor = Deep;
-            button.FlatAppearance.BorderSize = 2;
-            button.UseVisualStyleBackColor = false;
-            button.BackColor = primary ? Gold : Color.FromArgb(213, 238, 255);
-            button.ForeColor = Ink;
-            button.Font = Type(12, true);
-            button.Cursor = Cursors.Hand;
-            button.AutoSize = true;
-            button.Padding = new Padding(8, 2, 8, 2);
+            var path = new GraphicsPath();
+            int size = Math.Max(1, Math.Min(radius * 2, Math.Min(bounds.Width, bounds.Height)));
+            path.AddArc(bounds.Left, bounds.Top, size, size, 180, 90);
+            path.AddArc(bounds.Right-size, bounds.Top, size, size, 270, 90);
+            path.AddArc(bounds.Right-size, bounds.Bottom-size, size, size, 0, 90);
+            path.AddArc(bounds.Left, bounds.Bottom-size, size, size, 90, 90);
+            path.CloseFigure();
+            return path;
         }
 
         internal static async Task<bool> Ask(Form owner, string title, string body, string action, string cancel = null, bool preferCancel = false)
@@ -78,6 +76,104 @@ namespace PoptropicaDesktop
         }
     }
 
+    internal sealed class GameButton : Button
+    {
+        private bool hovered;
+        private bool pressed;
+
+        internal GameButton()
+        {
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderSize = 0;
+            Font = GameStyle.Type(12, true);
+            Cursor = Cursors.Hand;
+            AutoSize = true;
+            Padding = new Padding(10, 4, 10, 4);
+            MinimumSize = new Size(84, 40);
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
+        }
+
+        protected override void OnMouseEnter(EventArgs e) { base.OnMouseEnter(e); hovered=true; Invalidate(); }
+        protected override void OnMouseLeave(EventArgs e) { base.OnMouseLeave(e); hovered=false; Invalidate(); }
+        protected override void OnMouseDown(MouseEventArgs e) { base.OnMouseDown(e); pressed=e.Button==MouseButtons.Left; Invalidate(); }
+        protected override void OnMouseUp(MouseEventArgs e) { base.OnMouseUp(e); pressed=false; Invalidate(); }
+        protected override void OnMouseCaptureChanged(EventArgs e) { base.OnMouseCaptureChanged(e); if(!Capture)pressed=false; Invalidate(); }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (Width<4 || Height<4) return;
+            using (var path=GameStyle.Rounded(ClientRectangle,10))
+            {
+                var old=Region;
+                Region=new Region(path);
+                if(old!=null)old.Dispose();
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var rect=Rectangle.Inflate(ClientRectangle,-1,-1);
+            if(rect.Width<2 || rect.Height<2)return;
+            var top=Enabled ? (hovered ? Color.FromArgb(132,209,255) : Color.FromArgb(103,186,251)) : Color.LightSlateGray;
+            var bottom=Enabled ? (pressed ? GameStyle.Deep : Color.FromArgb(24,128,216)) : Color.SlateGray;
+            e.Graphics.SmoothingMode=SmoothingMode.AntiAlias;
+            using(var path=GameStyle.Rounded(rect,10))
+            using(var brush=new LinearGradientBrush(rect,top,bottom,90f))
+            using(var edge=new Pen(GameStyle.Deep,2))
+            {
+                e.Graphics.FillPath(brush,path);
+                e.Graphics.DrawPath(edge,path);
+            }
+            var textBounds=ClientRectangle;
+            if(pressed)textBounds.Offset(0,1);
+            const TextFormatFlags flags=TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine;
+            textBounds.Offset(0,1);
+            TextRenderer.DrawText(e.Graphics,Text,Font,textBounds,GameStyle.Deep,flags);
+            textBounds.Offset(0,-1);
+            TextRenderer.DrawText(e.Graphics,Text,Font,textBounds,Color.White,flags);
+            if(Focused && ShowFocusCues)
+                using(var ring=GameStyle.Rounded(Rectangle.Inflate(rect,-3,-3),7))
+                using(var pen=new Pen(GameStyle.Gold,2))e.Graphics.DrawPath(pen,ring);
+        }
+    }
+
+    internal sealed class GameToggle : CheckBox
+    {
+        internal GameToggle()
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            Cursor=Cursors.Hand;
+            Padding=new Padding(6,1,6,1);
+        }
+
+        public override Size GetPreferredSize(Size proposed)
+        {
+            var text=TextRenderer.MeasureText(Text,Font);
+            return new Size(text.Width+text.Height+Padding.Horizontal+10,text.Height+Padding.Vertical+8);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            int size=Math.Max(12,Font.Height);
+            var box=new Rectangle(Padding.Left+2,(Height-size)/2,size,size);
+            e.Graphics.SmoothingMode=SmoothingMode.AntiAlias;
+            using(var path=GameStyle.Rounded(box,4))
+            using(var fill=new SolidBrush(Checked ? GameStyle.Deep : Color.White))
+            using(var edge=new Pen(GameStyle.Deep,2))
+            {
+                e.Graphics.FillPath(fill,path);
+                e.Graphics.DrawPath(edge,path);
+            }
+            if(Checked)
+                using(var tick=new Pen(Color.White,2))
+                    e.Graphics.DrawLines(tick,new[]{new Point(box.Left+size/5,box.Top+size/2),new Point(box.Left+size*2/5,box.Top+size*3/4),new Point(box.Left+size*4/5,box.Top+size/4)});
+            var label=Rectangle.FromLTRB(box.Right+6,0,Width-Padding.Right,Height);
+            TextRenderer.DrawText(e.Graphics,Text,Font,label,ForeColor,TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
+            if(Focused && ShowFocusCues)ControlPaint.DrawFocusRectangle(e.Graphics,Rectangle.Inflate(ClientRectangle,-1,-1));
+        }
+    }
+
     internal sealed class GameDialog : UserControl
     {
         private readonly FlowLayoutPanel buttons = new FlowLayoutPanel();
@@ -89,9 +185,11 @@ namespace PoptropicaDesktop
         internal GameDialog(string title, string description)
         {
             AccessibleName = title;
-            Size = new Size(500,242);
+            Size = new Size(520,252);
+            DoubleBuffered = true;
+            Padding = new Padding(8);
             AutoScaleMode = AutoScaleMode.Dpi;
-            BackColor = GameStyle.Sky;
+            BackColor = Color.FromArgb(38,157,241);
             var heading = new Label { Text=title, ForeColor=Color.White, Font=GameStyle.Type(19,true), AutoSize=false, BackColor=Color.Transparent, TextAlign=ContentAlignment.MiddleCenter, Dock=DockStyle.Top, Height=62 };
             body.Text = description;
             body.ForeColor = GameStyle.Ink;
@@ -113,7 +211,7 @@ namespace PoptropicaDesktop
         internal async Task<DialogResult> Present(Form owner)
         {
             var game = (GameWindow)owner;
-            using (var backdrop = new Panel {Dock=DockStyle.Fill, BackColor=Color.FromArgb(7,31,52),TabStop=false})
+            using (var backdrop = new Panel {Dock=DockStyle.Fill, BackColor=GameStyle.Deep,TabStop=false})
             {
                 backdrop.Controls.Add(this);
                 backdrop.Resize += delegate {
@@ -143,7 +241,7 @@ namespace PoptropicaDesktop
 
         internal void AddToggle(string label,bool initial,Func<bool,bool> changed)
         {
-            var option = new CheckBox { Text=label,Checked=initial,Font=GameStyle.Type(13,true),ForeColor=GameStyle.Ink,BackColor=Color.Transparent,AutoSize=true,Anchor=AnchorStyles.None };
+            var option = new GameToggle { Text=label,Checked=initial,Font=GameStyle.Type(13,true),ForeColor=GameStyle.Ink,BackColor=Color.Transparent,AutoSize=true,Anchor=AnchorStyles.None };
             var row=new TableLayoutPanel { Height=37,Dock=DockStyle.Bottom,ColumnCount=1,RowCount=1,BackColor=Color.Transparent };
             row.Controls.Add(option,0,0);
             Controls.Add(row);
@@ -161,8 +259,7 @@ namespace PoptropicaDesktop
 
         internal Button AddAction(string label, DialogResult selected, bool primary)
         {
-            var button = new Button {Text=label};
-            GameStyle.ButtonStyle(button,primary);
+            var button = new GameButton {Text=label};
             buttons.Controls.Add(button);
             if (primary) DefaultAction = button;
             if (selected == DialogResult.Cancel) cancelAction = button;
@@ -177,13 +274,36 @@ namespace PoptropicaDesktop
             return base.ProcessCmdKey(ref msg,keyData);
         }
 
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (Width<8 || Height<8)return;
+            using(var path=GameStyle.Rounded(ClientRectangle,15))
+            {
+                var old=Region;
+                Region=new Region(path);
+                if(old!=null)old.Dispose();
+            }
+        }
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            using (var brush = new LinearGradientBrush(ClientRectangle, GameStyle.Sky, Color.FromArgb(38,157,241), 90f))
-                e.Graphics.FillRectangle(brush,ClientRectangle);
-            using (var pen=new Pen(GameStyle.Deep,3))
-                e.Graphics.DrawRectangle(pen,1,1,Width-3,Height-3);
+            if (Width<8 || Height<8)return;
+            e.Graphics.Clear(GameStyle.Deep);
+            using(var clip=GameStyle.Rounded(ClientRectangle,15))e.Graphics.SetClip(clip);
+            using(var fill=new SolidBrush(BackColor))e.Graphics.FillRectangle(fill,ClientRectangle);
+            var band=new Rectangle(0,0,Width,Math.Min(Height,62));
+            using(var brush=new LinearGradientBrush(band,GameStyle.Sky,BackColor,90f))
+                e.Graphics.FillRectangle(brush,band);
+            e.Graphics.SmoothingMode=SmoothingMode.AntiAlias;
+            using(var outer=GameStyle.Rounded(Rectangle.Inflate(ClientRectangle,-1,-1),14))
+            using(var inner=GameStyle.Rounded(Rectangle.Inflate(ClientRectangle,-3,-3),12))
+            using(var edge=new Pen(Color.FromArgb(8,116,184),2))
+            using(var highlight=new Pen(Color.FromArgb(158,224,255),2))
+            {
+                e.Graphics.DrawPath(edge,outer);
+                e.Graphics.DrawPath(highlight,inner);
+            }
         }
     }
 }
-

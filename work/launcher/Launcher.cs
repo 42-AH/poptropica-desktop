@@ -17,8 +17,8 @@ using Microsoft.Win32.SafeHandles;
 [assembly: AssemblyDescription("Poptropica desktop player")]
 [assembly: AssemblyCompany("poptropica.love")]
 [assembly: AssemblyProduct("Poptropica")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.1.0")]
+[assembly: AssemblyFileVersion("1.1.1.0")]
 
 namespace PoptropicaDesktop
 {
@@ -206,7 +206,7 @@ namespace PoptropicaDesktop
         private readonly Panel message = new Panel();
         private readonly Label heading = new Label();
         private readonly Label detail = new Label();
-        private readonly Button retry = new Button();
+        private readonly Button retry = new GameButton();
         private bool local, busy, playing, fullScreen;
         private ulong navigation;
         private Form hostWindow;
@@ -268,7 +268,6 @@ namespace PoptropicaDesktop
             detail.Font = GameStyle.Type(14);
             detail.TextAlign = ContentAlignment.TopCenter;
             retry.Text = "Try again";
-            GameStyle.ButtonStyle(retry, true);
             retry.Click += async delegate { await StartGame(); };
             message.Controls.AddRange(new Control[] {heading, detail, retry});
             message.Resize += delegate { LayoutMessage(); };
@@ -326,7 +325,7 @@ namespace PoptropicaDesktop
         private async Task InitializeUpdates()
         {
             bool? setting = UpdatePreference.Read(data);
-            bool enabled = setting ?? await GameStyle.Ask(this,"Automatic updates?", "Download player and island updates when Poptropica opens? They take effect the next time you play. You can change this in Settings.", "Turn on", "No thanks", true);
+            bool enabled = setting ?? await GameStyle.Ask(this,"Automatic updates?", "Download island and player updates automatically? Updates are ready the next time you play. You can change this in Settings.", "Turn on", "No thanks", true);
             if (IsDisposed) return;
             automaticEnabled = enabled;
             if (!setting.HasValue) SavePreference(enabled);
